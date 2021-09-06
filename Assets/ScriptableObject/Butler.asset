@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e757c39d198844848c689f5a35364e9, type: 3}
+  m_Name: Butler
+  m_EditorClassIdentifier: 
+  characterName: "\u57F7\u4E8B"
+  cost: 0
+  maxHp: 50
+  defaultAtk: 55
+  defaultSpd: 45
+  hp: 50
+  atk: 55
+  spd: 45
+  isFriend: 1
+  isCanAction: 1
+  action: 0
+  sprite: {fileID: -5354158706824179416, guid: bc1a94b4691e0491b82737ba25f8a620, type: 3}
+  friendSprite: {fileID: 4905300953310956982, guid: bc1a94b4691e0491b82737ba25f8a620, type: 3}
+  enemySprite: {fileID: 2883939252096736571, guid: bc1a94b4691e0491b82737ba25f8a620, type: 3}
