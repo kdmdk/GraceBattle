@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e757c39d198844848c689f5a35364e9, type: 3}
   m_Name: YoungWoman
   m_EditorClassIdentifier: 
-  characterName: "\u82E5\u3044\u5973"
+  characterName: "\u82E5\u3044\u5973\u6027"
   cost: 0
   maxHp: 40
   defaultAtk: 45
@@ -22,6 +22,7 @@ MonoBehaviour:
   spd: 65
   isFriend: 1
   isCanAction: 1
+  isAlive: 1
   action: 0
   sprite: {fileID: -2895229125947733237, guid: 567495a039f2042ce8701d2ee6435204, type: 3}
   friendSprite: {fileID: -2050541958700045883, guid: 567495a039f2042ce8701d2ee6435204, type: 3}

@@ -14,9 +14,9 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField]
     public static List<Character> CharactersList = new List<Character>();
-    //internal static object instanse;
     public static GameObject resultPanel;
-
+    public GameObject readyButton;
+    float waitTime = 5;
     void Awake()
     {
         resultPanel = GameObject.Find("ResultPanel");
@@ -26,10 +26,12 @@ public class BattleManager : MonoBehaviour
     {
         if (!SelectManager.isStart || onLoaded)
         {
+            SortPanel();
             return;
         }
         LoadCharacterData();
     }
+    //リセット処理
     public void Reset()
     {
         //選択フラグを全てオフに
@@ -55,6 +57,7 @@ public class BattleManager : MonoBehaviour
         BattleManager.CharactersList.Clear();
         resultPanel.SetActive(false);
     }
+    //キャラクターパネルの生成処理
     void LoadCharacterData()
     {
         //味方のパネル生成処理
@@ -123,56 +126,90 @@ public class BattleManager : MonoBehaviour
 
         CharactersList.Sort((a, b) => b.battlerStatus.spd - a.battlerStatus.spd);
 
-        //battlePanelにインデックスをつけてヒエラルキー上のオブジェクトを並び替える
-        int panelCount = 0;
-        foreach(Character character in CharactersList)
-        {
-            character.battlerPanel.transform.SetSiblingIndex(panelCount);
-            character.target = character;
-
-            panelCount++;
-        }
-
+        SortPanel();
+        
         onLoaded = true;
     }
 
-
+    //キャラクターパネルの並び替え
+    void SortPanel()
+    {
+        //battlePanelにインデックスをつけてヒエラルキー上のオブジェクトを並び替える
+        int panelCount = 0;
+        foreach (Character character in CharactersList)
+        {
+            character.battlerPanel.transform.SetSiblingIndex(panelCount);
+            if (!onLoaded)
+            {
+                character.target = character;
+            }
+            panelCount++;
+        }
+    }
+    //readyボタンをクリックしたとき
     public void OnClickReady()
     {
         //条件に従って行動をとる
-        foreach (Character character in CharactersList)
+        StartCoroutine("Action");
+    }
+    IEnumerator Action()
+    {
+        readyButton.SetActive(false);
+        for (int i = 0; i < CharactersList.Count; i++)
         {
-            if (character.battlerStatus.action == actionType.guard && character.battlerStatus.isCanAction)
+            Character character = CharactersList[i];
+            //生きている場合、行動をする
+            if (character.battlerStatus.isAlive)
             {
-                character.DefAct();
-            }
-            if (character.battlerStatus.action == actionType.punch && character.battlerStatus.isCanAction)
-            {
-                character.Action();
-            }
-            if (character.battlerStatus.action == actionType.kick && character.battlerStatus.isCanAction)
-            {
-                character.kick();
-            }
-            if (character.battlerStatus.action == actionType.protect && character.battlerStatus.isCanAction)
-            {
-                character.protect();
-            }
-            if (character.battlerStatus.action == actionType.heal && character.battlerStatus.isCanAction)
-            {
-                character.heal();
+                switch (character.battlerStatus.action)
+                {
+                    case actionType.guard:
+                        character.Guard();
+                        break;
+                    case actionType.punch:
+                        character.Punch();
+                        break;
+                    case actionType.kick:
+                        character.Kick();
+                        break;
+                    case actionType.protect:
+                        character.Protect();
+                        break;
+                    case actionType.heal:
+                        character.Heal();
+                        break;
+                    default:
+                        break;
+                }
+                DeadOrArive();
+                yield return new WaitForSeconds(waitTime);
+                Debug.Log("end " + i);
             }
         }
+        OtherProcess();
+        readyButton.SetActive(true);
+    }
+
+    void DeadOrArive()
+    {
         //hp0の時にパネルを隠す
-        foreach (Character character in CharactersList)
+        //foreach (Character character in CharactersList)
+        for (int i = 0; i < CharactersList.Count; i++)
         {
+            Character character = CharactersList[i];
             if (character.battlerStatus.hp <= 0)
             {
                 character.battlerStatus.isAlive = false;
                 character.battlerPanel.SetActive(false);
                 character.battlerImg.GetComponent<SpriteRenderer>().enabled = false;
+                Debug.Log(character.battlerStatus.characterName + "は倒れた！");
+                //CharactersList.Remove(character);
             }
         }
+    }
+
+    void OtherProcess()
+    {
         //各陣営何人残っているかで判定
         int fCnt = 0;
         int eCnt = 0;
@@ -189,6 +226,7 @@ public class BattleManager : MonoBehaviour
         }
         //Debug.Log(fCnt + ":" + eCnt);
 
+        //リザルト画面
         Text resultText = resultPanel.GetComponentInChildren<Text>();
 
         if (fCnt == 0 && eCnt == 0)
@@ -196,12 +234,12 @@ public class BattleManager : MonoBehaviour
             resultPanel.SetActive(true);
             resultText.text = "DRAW";
         }
-        else if(fCnt == 0)
+        else if (fCnt == 0)
         {
             resultPanel.SetActive(true);
             resultText.text = "LOSE";
         }
-        else if(eCnt == 0)
+        else if (eCnt == 0)
         {
             resultPanel.SetActive(true);
             resultText.text = "WIN";

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e757c39d198844848c689f5a35364e9, type: 3}
   m_Name: OldWoman
   m_EditorClassIdentifier: 
-  characterName: "\u304A\u3070\u3042\u3055\u3093"
+  characterName: "\u8001\u5A46"
   cost: 0
   maxHp: 40
   defaultAtk: 40
@@ -22,6 +22,7 @@ MonoBehaviour:
   spd: 40
   isFriend: 1
   isCanAction: 1
+  isAlive: 1
   action: 0
   sprite: {fileID: -5637099635769613915, guid: 1895fb096c5f54060b16fa9ae87b006e, type: 3}
   friendSprite: {fileID: 8812580464715256089, guid: 1895fb096c5f54060b16fa9ae87b006e, type: 3}

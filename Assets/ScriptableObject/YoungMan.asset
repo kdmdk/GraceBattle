@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e757c39d198844848c689f5a35364e9, type: 3}
   m_Name: YoungMan
   m_EditorClassIdentifier: 
-  characterName: "\u82E5\u3044\u7537"
+  characterName: "\u82E5\u3044\u7537\u6027"
   cost: 0
   maxHp: 60
   defaultAtk: 50
@@ -22,6 +22,7 @@ MonoBehaviour:
   spd: 60
   isFriend: 1
   isCanAction: 1
+  isAlive: 1
   action: 0
   sprite: {fileID: 5832960264137097363, guid: 11b92c5f388574af4ae673072893c744, type: 3}
   friendSprite: {fileID: -2499365141067532745, guid: 11b92c5f388574af4ae673072893c744, type: 3}

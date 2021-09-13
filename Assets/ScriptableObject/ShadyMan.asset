@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e757c39d198844848c689f5a35364e9, type: 3}
   m_Name: ShadyMan
   m_EditorClassIdentifier: 
-  characterName: "\u3042\u3084\u3057\u3044\u7537"
+  characterName: "\u3042\u3084\u3057\u3044\u7537\u6027"
   cost: 0
   maxHp: 55
   defaultAtk: 65
@@ -22,6 +22,7 @@ MonoBehaviour:
   spd: 30
   isFriend: 1
   isCanAction: 1
+  isAlive: 1
   action: 0
   sprite: {fileID: 7753523026655755599, guid: 3d033ac5ced1d455c85a2d1487417efc, type: 3}
   friendSprite: {fileID: -2564582750611345349, guid: 3d033ac5ced1d455c85a2d1487417efc, type: 3}

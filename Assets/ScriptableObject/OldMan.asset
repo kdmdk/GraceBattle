@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e757c39d198844848c689f5a35364e9, type: 3}
   m_Name: OldMan
   m_EditorClassIdentifier: 
-  characterName: "\u304A\u3058\u3044\u3055\u3093"
+  characterName: "\u8001\u4EBA"
   cost: 50
   maxHp: 50
   defaultAtk: 50
@@ -22,6 +22,7 @@ MonoBehaviour:
   spd: 50
   isFriend: 1
   isCanAction: 1
+  isAlive: 1
   action: 0
   sprite: {fileID: -4781873979841911580, guid: 2d17c75979a6c4037a224d74088e6d9a, type: 3}
   friendSprite: {fileID: 393628562701773774, guid: 2d17c75979a6c4037a224d74088e6d9a, type: 3}

@@ -10,79 +10,131 @@ public class Character
     public Character target;
     public Character user;
     public SpriteRenderer battlerImg;
-    
-    public void Action()
-    {
-        int deff = 1;
-        if(target.battlerStatus.action == actionType.guard)
-        {
-            deff = 2;
-        }
-        else if (target.battlerStatus.action == actionType.protect)
-        {
-            deff = 4;
-        }
 
-        target.battlerStatus.hp -= (user.battlerStatus.atk / 2) / deff;
-        //Debug.Log(target.battlerStatus.name + ":" + target.battlerStatus.hp);
-        battlerStatus.isCanAction = false;
-        Debug.Log(user.battlerStatus.name + ":" + target.battlerStatus.name);
-    }
-    public void DefAct()
+    Dictionary<actionType, int> defensePoint = new Dictionary<actionType, int>()
     {
-        //Debug.Log("Def");
-        battlerStatus.isCanAction = false;
-    }
-    public void kick()
+        {actionType.guard, 2},
+        {actionType.protect, 4},
+    };
+
+    public enum TargetType
     {
+        self,
+        enemy,
+        friend,
+    }
+
+    //パンチのとき（基本攻撃）
+    public void Punch()
+    {
+        Targeting(TargetType.enemy);
+        CommonAction();
+        Attack(2);
+    }
+    //防御行動
+    public void Guard()
+    {
+        Targeting(TargetType.self);
+        CommonAction();
+    }
+    //キックのとき（特殊攻撃）
+    public void Kick()
+    {
+        Targeting(TargetType.enemy);
+        CommonAction();
+        Attack(1);
+        BattleManager.CharactersList.Remove(target);
+        BattleManager.CharactersList.Insert(BattleManager.CharactersList.Count, target);
+    }
+    //かばうのとき（敵のターゲットを自分にする）
+    public void Protect()
+    {
+        Targeting(TargetType.self);
+        CommonAction();
+    }
+    //回復行動
+    public void Heal()
+    {
+        Targeting(TargetType.friend);
+        CommonAction();
+        target.battlerStatus.hp += 30;
+    }
+    //汎用攻撃(攻撃の強さ、数が少ないほどつよい)
+    void Attack(int powerRank)
+    {
+        //エラー処理
+        if(powerRank == 0)
+        {
+            Debug.Log("Error!:"+ powerRank);
+            powerRank = -1;
+        }
+        //敵がぼうぎょ、かばうを使っているときダメージを軽減
         int deff = 1;
         if (target.battlerStatus.action == actionType.guard)
         {
-            deff = 2;
+            deff = defensePoint[actionType.guard];
         }
         else if (target.battlerStatus.action == actionType.protect)
         {
-            deff = 4;
+            deff = defensePoint[actionType.protect];
         }
-        target.battlerStatus.hp -= (user.battlerStatus.atk / 4) / deff;
-        //Debug.Log(target.battlerStatus.name + ":" + target.battlerStatus.hp);
-
-        //target.battlerPanel.transform.SetSiblingIndex(BattleManager.CharactersList.Count - 1);
-        //BattleManager.CharactersList.Insert(BattleManager.CharactersList.Count - 1, target);
-
+        //敵がかばうを使っているとき
+        foreach (Character chara in BattleManager.CharactersList)
+        {
+            if(chara.battlerStatus.action == actionType.protect)
+            {
+                user.target = chara;
+            }
+        }
+        target.battlerStatus.hp -= (user.battlerStatus.atk / powerRank) / deff;
+    }
+    //共通行動
+    void CommonAction()
+    {
+        //死んでる場合ターゲットを切り替え
+        Debug.Log($"{target.battlerStatus.characterName}は生きているか？{target.battlerStatus.isAlive}");
+        Debug.Log($"{user.battlerStatus.characterName}は{target.battlerStatus.characterName}に{user.battlerStatus.action}をした");
+        //行動不能になる
         battlerStatus.isCanAction = false;
-        /*
-        Debug.Log(user.battlerStatus.name + ":" + target.battlerStatus.name);
-        foreach(Character c in BattleManager.CharactersList)
-        {
-            Debug.Log(c.battlerStatus.name);
-        }
-        */
+    }
 
-    }
-    public void protect()
+    void Targeting(TargetType type)
     {
-        foreach (Character character in BattleManager.CharactersList)
+        switch (type)
         {
-            if (user.battlerStatus.isFriend)
-            {
-                if (!character.battlerStatus.isFriend && character.battlerStatus.action != actionType.heal)
+            case TargetType.self:
                 {
-                    character.target = user;
+                    target = user;
                 }
-            }
-            else
-            if (!user.battlerStatus.isFriend)
-            {
-                if (character.battlerStatus.isFriend && character.battlerStatus.action != actionType.heal)
+                break;
+            case TargetType.enemy:
+                { 
+                    if (user.battlerStatus.isFriend)
+                    {
+                        target = BattleManager.CharactersList.Find(n => !n.battlerStatus.isFriend && n.battlerStatus.isAlive);
+                    }
+                    else
+                    {
+                        target = BattleManager.CharactersList.Find(n => n.battlerStatus.isFriend && n.battlerStatus.isAlive);
+                    }
+                }
+                break;
+            case TargetType.friend:
                 {
-                    character.target = user;
+                    if (user.battlerStatus.isFriend)
+                    {
+                        target = BattleManager.CharactersList.Find(n => n.battlerStatus.isFriend && n.battlerStatus.isAlive);
+                    }
+                    else
+                    {
+                        target = BattleManager.CharactersList.Find(n => !n.battlerStatus.isFriend && n.battlerStatus.isAlive);
+                    }
                 }
-            }
+                break;
+            default:
+                break;
+
         }
-    }
-    public void heal()
-    {
-        target.battlerStatus.hp += 30;
+        
     }
 }

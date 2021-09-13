@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e757c39d198844848c689f5a35364e9, type: 3}
   m_Name: WandMan
   m_EditorClassIdentifier: 
-  characterName: "\u6756\u306E\u7537"
+  characterName: "\u6756\u306E\u7537\u6027"
   cost: 0
   maxHp: 45
   defaultAtk: 60
@@ -22,6 +22,7 @@ MonoBehaviour:
   spd: 60
   isFriend: 1
   isCanAction: 1
+  isAlive: 1
   action: 0
   sprite: {fileID: -4624145397036306079, guid: d0dfc2429453446b18385717869346a5, type: 3}
   friendSprite: {fileID: 6974555422644461915, guid: d0dfc2429453446b18385717869346a5, type: 3}
